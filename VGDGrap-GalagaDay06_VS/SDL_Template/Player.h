@@ -5,7 +5,7 @@
 #include "InputManager.h"
 #include "PhysEntity.h"
 #include "item.h"
-#include "Barrel.h"
+//#include "Barrel.h"
 
 using namespace SDLFramework;
 
@@ -46,6 +46,8 @@ private:
 	int mLives;
 
 	bool mDestroyBarrel;
+
+	
 
 	Texture* mMarioIdle;
 	Texture* mMarioIdleRight;
@@ -96,5 +98,7 @@ public:
 
 	bool GetDestroyBarrel();
 	void SetDestroyBarrel(bool destroy);
+
+	
 };
 #endif

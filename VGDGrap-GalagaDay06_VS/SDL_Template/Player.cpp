@@ -5,12 +5,12 @@
 void Player::HandleMovement() {
 
 	if (mCanClimb) {
-		if (mInput->KeyDown(SDL_SCANCODE_UP)) {
+		if (mInput->KeyDown(SDL_SCANCODE_W)) {
 			Translate(-Vec2_Up * mMoveSpeed * mTimer->DeltaTime(), World);
 			mAudio->PlaySFX("SFX/Sequence 01.wav");
 			mClimbing = true;
 		}
-		else if (mInput->KeyDown(SDL_SCANCODE_DOWN)) {
+		else if (mInput->KeyDown(SDL_SCANCODE_S)) {
 			Translate(Vec2_Up * mMoveSpeed * mTimer->DeltaTime(), World);
 			mAudio->PlaySFX("SFX/Sequence 01.wav");
 			mClimbing = true;
@@ -26,7 +26,7 @@ void Player::HandleMovement() {
 		//mStopClimbing = true;
 
 		//if (!mHammering) {
-			if (mInput->KeyDown(SDL_SCANCODE_RIGHT)) {
+			if (mInput->KeyDown(SDL_SCANCODE_D)) {
 				Translate(Vec2_Right * mMoveSpeed * mTimer->DeltaTime(), World);
 				mAudio->PlaySFX("SFX/Sequence 01.wav");
 				
@@ -54,7 +54,7 @@ void Player::HandleMovement() {
 					mHammeringRight = true;
 				}
 			}
-			else if (mInput->KeyDown(SDL_SCANCODE_LEFT)) {
+			else if (mInput->KeyDown(SDL_SCANCODE_A)) {
 				Translate(-Vec2_Right * mMoveSpeed * mTimer->DeltaTime(), World);
 				mAudio->PlaySFX("SFX/Sequence 01.wav");
 
@@ -137,6 +137,8 @@ Player::Player() {
 	mLives = 1; //210 122
 
 	mDestroyBarrel = false;
+
+	
 	
 	//idle left
 	mMarioIdle = new Texture("MarioRunning.png", 0, 0, 16, 16);
@@ -202,6 +204,8 @@ Player::Player() {
 	mJumpTexture->Parent(this);
 	mJumpTexture->Position(Graphics::SCREEN_WIDTH * 0.0f, Graphics::SCREEN_HEIGHT * 0.0f);
 
+	
+
 	AddCollider(new BoxCollider(Vector2(45.0f, 58.0f)));
 	
 	//AddCollider(new BoxCollider(Vector2(20.0f, 37.0f)), Vector2( 18.0f, 10.0f));
@@ -244,6 +248,8 @@ Player::~Player() {
 
 	delete mJumpTexture;
 	mJumpTexture = nullptr;
+
+	
 }
 
 void Player::Visible(bool visible) {
@@ -317,6 +323,7 @@ void Player::Update() {
 		mMarioHammerLeft->Update();
 		mMarioHammerRight->Update();
 		
+		
 		//mMarioIdle->Update();
 		//mMarioIdleRight->Update();
 
@@ -324,7 +331,7 @@ void Player::Update() {
 
 		if (mWasHit) {
 			mDeathAnimation->Update();
-			mWasHit = false;
+			//mWasHit = false;
 		}
 		
 		if (!mCanJump) {
@@ -362,37 +369,63 @@ void Player::Update() {
 	} 
 	//std::cout << "Slope		" << mSlope << std::endl;
 	/////
+
+
+	if (Position().y < 278 && Position().x < 640) {
+		mMoveBounds = Vector2(140.0f, 825.0f);
+		std::cout << "\nPlatform 6" << std::endl;
+	}
+	else if (Position().y < 278 && Position().x > 640) {
+		mMoveBounds = Vector2(140.0f, 825.0f);
+		std::cout << "\nPlatform 6" << std::endl;
+	}
+	else if (Position().y < 395 && Position().y >= 278) {
+		mMoveBounds = Vector2(197.0f, 883.0f);
+		std::cout << "\nPlatform 5" << std::endl;
+	}
+	else if (Position().y < 510 && Position().y >= 395) {
+		mMoveBounds = Vector2(140.0f, 825.0f);
+		std::cout << "\nPlatform 4" << std::endl;
+	}
+	else if (Position().y < 629 && Position().y >= 510) {
+		mMoveBounds = Vector2(197.0f, 883.0f);
+		std::cout << "\nPlatform 3" << std::endl;
+	}
+	else if (Position().y < 741 && Position().y >= 629) {
+		mMoveBounds = Vector2(140.0f, 825.0f);
+		std::cout << "\nPlatform 2" << std::endl;
+	}
+	else if (Position().x > (112 * 3.5) + 148 && Position().y > 741 && Position().x < 870) {
+		std::cout << "\nPlatform 1" << std::endl;
+	}
+	else {
+		std::cout << "\nPlatform 1" << std::endl;
+	}
 	if (Position().y < 278 && Position().x < 640) {
 		mIncline = false;
 		mDecline = false;
-		mMoveBounds = Vector2(140.0f, 825.0f);
 	}
 	else if (Position().y < 278 && Position().x > 640) {
 		mIncline = false;
 		mDecline = true;
-		mMoveBounds = Vector2(140.0f, 825.0f);
 	}
 	else if (Position().y < 395 && Position().x < 870) {
 		mIncline = true;
 		mDecline = false;
-		mMoveBounds = Vector2(197.0f, 883.0f);
 	}
 	else if (Position().y < 510 && Position().x > 16 + 148) {
 		mIncline = false;
 		mDecline = true;
-		mMoveBounds = Vector2(140.0f, 825.0f);
 	}
 	else if (Position().y < 629 && Position().x < 870) {
 		mIncline = true;
 		mDecline = false;
-		mMoveBounds = Vector2(197.0f, 883.0f);
 	}
 	else if (Position().y < 741 && Position().x > 16 + 148) {
 		mIncline = false;
 		mDecline = true;
-		mMoveBounds = Vector2(140.0f, 825.0f);
-	}	
-	else if (Position().x > (112 * 3.5) + 148 && Position().y > 741 && Position().x < 870 ) {
+	}
+	else if (Position().x > (112 * 3.5) + 148 && Position().y > 741 && Position().x < 870) {
 		mIncline = true;
 		mDecline = false;
 	}
@@ -416,6 +449,8 @@ void Player::Update() {
 			mCanPickUp = true;
 		}
 	}
+
+	
 
 	//std::cout << Position().y << std::endl;
 	//std::cout << Position().x << std::endl;
@@ -466,6 +501,7 @@ void Player::Render() {
 				mMarioIdleRight->Render();
 			}		
 		}
+
 		
 	}
 
